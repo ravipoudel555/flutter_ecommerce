@@ -1,6 +1,9 @@
+import 'package:ecommerce_app/screens/sign_up/sign_up.dart';
+import 'package:ecommerce_app/widgets/footer_text.dart';
 import 'package:flutter/material.dart';
 import 'package:ecommerce_app/constants/constants.dart';
 import 'package:ecommerce_app/widgets/custom_text_form_field.dart';
+import 'package:ecommerce_app/widgets/custom_button.dart';
 
 class SignInScreen extends StatefulWidget {
   const SignInScreen({Key? key}) : super(key: key);
@@ -23,7 +26,7 @@ class _SignInScreenState extends State<SignInScreen> {
             ),
             width: scrSize.width,
             height: scrSize.height,
-            color: Color(0xffF6F6F6),
+            color: kBackgroundColor,
             child: Column(
               mainAxisAlignment: MainAxisAlignment.center,
               crossAxisAlignment: CrossAxisAlignment.center,
@@ -68,58 +71,28 @@ class _SignInScreenState extends State<SignInScreen> {
                         SizedBox(
                           height: scrSize.height * 0.055,
                         ),
-                        InkWell(
-                          child: Container(
-                            width: scrSize.width * 0.4,
-                            height: scrSize.height * 0.08,
-                            decoration: BoxDecoration(
-                              color: kButtonColor,
-                              borderRadius: BorderRadius.all(
-                                Radius.circular(10.0),
-                              ),
-                            ),
-                            child: Center(
-                              child: Text(
-                                'Sign In',
-                                style: TextStyle(
-                                  color: Colors.white,
-                                  fontSize: scrSize.height * 0.036,
-                                  fontWeight: FontWeight.bold,
-                                ),
-                              ),
-                            ),
-                          ),
-                          onTap: () {
+                        CustomButton(
+                          scrSize: scrSize,
+                          label: "Sign In",
+                          onPressed: () {
                             print('sign in button pressed');
                           },
                         ),
                         SizedBox(
                           height: scrSize.height * 0.055,
                         ),
-                        Row(
-                          mainAxisAlignment: MainAxisAlignment.center,
-                          children: <Widget>[
-                            Text(
-                              'Not registered yet?',
-                              style: TextStyle(
-                                fontSize: scrSize.height * 0.024,
-                                color: klightTextColor,
-                              ),
-                            ),
-                            TextButton(
-                              onPressed: () {
-                                print('register pressed');
-                              },
-                              child: Text(
-                                'Register',
-                                style: TextStyle(
-                                  fontSize: scrSize.height * 0.024,
-                                  color: kButtonColor,
-                                ),
-                              ),
-                            ),
-                          ],
-                        ),
+                        FooterText(
+                            scrSize: scrSize,
+                            footerText: 'Not registered yet?',
+                            footerLinkText: 'Register',
+                            onPressed: () {
+                              Navigator.pop(context);
+                              Navigator.push(
+                                context,
+                                MaterialPageRoute(
+                                    builder: (context) => SignUpScreen()),
+                              );
+                            }),
                       ],
                     ),
                   ),
