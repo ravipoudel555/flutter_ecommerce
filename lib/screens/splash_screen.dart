@@ -1,3 +1,4 @@
+import 'package:ecommerce_app/screens/sigin_in/sign_in.dart';
 import 'package:flutter/material.dart';
 
 const kBackgroundColor = Color(0xff1C1C1C);
@@ -31,9 +32,7 @@ class _SplashScreenState extends State<SplashScreen> {
             Navigator.push(
               context,
               MaterialPageRoute(
-                builder: (context) => Container(
-                  child: Text('login'),
-                ),
+                builder: (context) => SignInScreen(),
               ),
             );
           });
