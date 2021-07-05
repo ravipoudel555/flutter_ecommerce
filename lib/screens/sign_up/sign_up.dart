@@ -1,9 +1,11 @@
+import 'package:ecommerce_app/backend/signup_api.dart';
 import 'package:ecommerce_app/screens/sigin_in/sign_in.dart';
 import 'package:ecommerce_app/widgets/custom_button.dart';
 import 'package:ecommerce_app/widgets/custom_text_form_field.dart';
 import 'package:ecommerce_app/widgets/footer_text.dart';
 import 'package:flutter/material.dart';
 import 'package:ecommerce_app/constants/constants.dart';
+import 'package:http/http.dart' as http;
 
 class SignUpScreen extends StatefulWidget {
   @override
@@ -11,6 +13,9 @@ class SignUpScreen extends StatefulWidget {
 }
 
 class _SignUpScreenState extends State<SignUpScreen> {
+  final citizenshipNoController = TextEditingController();
+  final emailController = TextEditingController();
+  final passwordController = TextEditingController();
   @override
   Widget build(BuildContext context) {
     Size scrSize = MediaQuery.of(context).size;
@@ -48,33 +53,81 @@ class _SignUpScreenState extends State<SignUpScreen> {
                 height: scrSize.height * 0.055,
               ),
               CustomTextFormField(
+                controller: citizenshipNoController,
                 scrSize: scrSize,
                 label: "Citizenship No.",
+                validationMessage: "Enter citizenship number",
               ),
               SizedBox(
                 height: scrSize.height * 0.055,
               ),
               CustomTextFormField(
+                controller: emailController,
                 scrSize: scrSize,
                 label: "Email",
+                validationMessage: "Enter email",
               ),
               SizedBox(
                 height: scrSize.height * 0.055,
               ),
               CustomTextFormField(
-                scrSize: scrSize,
-                label: "Password",
-                isObscure: true,
-                textInputAction: TextInputAction.done,
-              ),
+                  controller: passwordController,
+                  scrSize: scrSize,
+                  label: "Password",
+                  isObscure: true,
+                  textInputAction: TextInputAction.done,
+                  validationMessage: 'Enter password'),
               SizedBox(
                 height: scrSize.height * 0.055,
               ),
               CustomButton(
                 scrSize: scrSize,
                 label: "Sign Up",
-                onPressed: () {
+                onPressed: () async {
                   print('sign up button pressed');
+                  if (emailController.text.trim() == '' ||
+                      passwordController.text.trim() == '' ||
+                      citizenshipNoController.text.trim() == '') {
+                    showDialog(
+                      context: context,
+                      builder: (BuildContext context) {
+                        return SingleChildScrollView(
+                          child: AlertDialog(
+                            titleTextStyle: TextStyle(
+                                color: Colors.red,
+                                fontSize: scrSize.height * 0.035),
+                            title: Text('Signup failed!'),
+                            content: ListBody(
+                              children: <Widget>[
+                                Text('Please fill all the fields'),
+                              ],
+                            ),
+                            actions: <Widget>[
+                              TextButton(
+                                  onPressed: () {
+                                    Navigator.pop(context);
+                                  },
+                                  child: Text(
+                                    'Okay',
+                                    style: TextStyle(
+                                      color: kButtonColor,
+                                      fontSize: scrSize.height * 0.03,
+                                    ),
+                                  ))
+                            ],
+                          ),
+                        );
+                      },
+                    );
+                  } else {
+                    http.Response response = await SignupApi(
+                            citizenshipNo: citizenshipNoController.text,
+                            email: emailController.text,
+                            password: passwordController.text)
+                        .signup();
+
+                    print(response.body);
+                  }
                 },
               ),
               SizedBox(

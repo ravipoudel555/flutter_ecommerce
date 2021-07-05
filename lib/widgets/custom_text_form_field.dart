@@ -2,16 +2,21 @@ import 'package:flutter/material.dart';
 import 'package:ecommerce_app/constants/constants.dart';
 
 class CustomTextFormField extends StatelessWidget {
-  CustomTextFormField(
-      {required this.scrSize,
-      required this.label,
-      this.isObscure = false,
-      this.textInputAction = TextInputAction.next});
+  CustomTextFormField({
+    required this.scrSize,
+    required this.label,
+    this.isObscure = false,
+    this.textInputAction = TextInputAction.next,
+    required this.validationMessage,
+    this.controller,
+  });
 
   final Size scrSize;
   final String label;
   final bool isObscure;
   final TextInputAction textInputAction;
+  final String validationMessage;
+  final TextEditingController? controller;
 
   @override
   Widget build(BuildContext context) {
@@ -32,6 +37,7 @@ class CustomTextFormField extends StatelessWidget {
           bottom: scrSize.height * 0.01,
         ),
         child: TextFormField(
+          controller: controller,
           textInputAction: textInputAction,
           cursorColor: kButtonColor,
           obscureText: isObscure,
@@ -48,6 +54,12 @@ class CustomTextFormField extends StatelessWidget {
               fontSize: scrSize.height * 0.024,
             ),
           ),
+          validator: (value) {
+            if (value == null || value.isEmpty) {
+              return validationMessage;
+            }
+            return null;
+          },
         ),
       ),
     );
