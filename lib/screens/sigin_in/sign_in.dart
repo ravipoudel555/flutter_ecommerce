@@ -1,13 +1,16 @@
-import 'dart:convert';
-
 import 'package:ecommerce_app/backend/login_api.dart';
+import 'package:ecommerce_app/backend/services.dart';
+import 'package:ecommerce_app/models/User.dart';
+import 'package:ecommerce_app/order_screen/product_details.dart';
 import 'package:ecommerce_app/screens/sign_up/sign_up.dart';
+import 'package:ecommerce_app/widgets/dialog_widget.dart';
 import 'package:ecommerce_app/widgets/footer_text.dart';
 import 'package:flutter/material.dart';
 import 'package:ecommerce_app/constants/constants.dart';
 import 'package:ecommerce_app/widgets/custom_text_form_field.dart';
 import 'package:ecommerce_app/widgets/custom_button.dart';
 import 'package:http/http.dart' as http;
+import 'package:flutter/widgets.dart';
 
 class SignInScreen extends StatefulWidget {
   const SignInScreen({Key? key}) : super(key: key);
@@ -87,37 +90,19 @@ class _SignInScreenState extends State<SignInScreen> {
                             label: "Sign In",
                             onPressed: () async {
                               if (emailController.text.trim() == '' ||
-                                  passwordController.text == '') {
+                                  passwordController.text.trim() == '') {
                                 showDialog(
                                   context: context,
                                   builder: (BuildContext context) {
-                                    return SingleChildScrollView(
-                                      child: AlertDialog(
-                                        titleTextStyle: TextStyle(
-                                            color: Colors.red,
-                                            fontSize: scrSize.height * 0.035),
-                                        title: Text('Login failed!'),
-                                        content: ListBody(
-                                          children: <Widget>[
-                                            Text(
-                                                'Please enter both email and password'),
-                                          ],
-                                        ),
-                                        actions: <Widget>[
-                                          TextButton(
-                                              onPressed: () {
-                                                Navigator.pop(context);
-                                              },
-                                              child: Text(
-                                                'Okay',
-                                                style: TextStyle(
-                                                  color: kButtonColor,
-                                                  fontSize:
-                                                      scrSize.height * 0.03,
-                                                ),
-                                              ))
-                                        ],
-                                      ),
+                                    return DialogWidget(
+                                      scrSize: scrSize,
+                                      titleText: 'Login failed!',
+                                      errorMessage:
+                                          'Please enter both email and password',
+                                      buttonText: 'Okay',
+                                      onPressed: () {
+                                        Navigator.pop(context);
+                                      },
                                     );
                                   },
                                 );
@@ -126,7 +111,36 @@ class _SignInScreenState extends State<SignInScreen> {
                                         emailController.text,
                                         passwordController.text)
                                     .login();
-                                print(response.body);
+
+                                if (response.statusCode == 200) {
+                                  final user = userFromJson(response.body);
+                                  print(user.email);
+                                  ServicePref().setEmail(user.email);
+                                  ServicePref().setToken(user.token);
+                                  ServicePref().setStatus(true);
+                                  Navigator.push(
+                                    context,
+                                    MaterialPageRoute(
+                                      builder: (context) =>
+                                          ProductDetailsScreen(),
+                                    ),
+                                  );
+                                } else {
+                                  showDialog(
+                                    context: context,
+                                    builder: (BuildContext context) {
+                                      return DialogWidget(
+                                        scrSize: scrSize,
+                                        titleText: 'Login failed!',
+                                        errorMessage: 'Invalid credentials',
+                                        buttonText: 'cancel',
+                                        onPressed: () {
+                                          Navigator.pop(context);
+                                        },
+                                      );
+                                    },
+                                  );
+                                }
                               }
                             }),
                         SizedBox(

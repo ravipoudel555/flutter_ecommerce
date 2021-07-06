@@ -1,3 +1,4 @@
+import 'package:ecommerce_app/order_screen/product_details.dart';
 import 'package:ecommerce_app/screens/sigin_in/sign_in.dart';
 import 'package:flutter/material.dart';
 
@@ -20,11 +21,7 @@ class _SplashScreenState extends State<SplashScreen> {
             Navigator.pop(context);
             Navigator.push(
               context,
-              MaterialPageRoute(
-                builder: (context) => Container(
-                  child: Text('Welcome'),
-                ),
-              ),
+              MaterialPageRoute(builder: (context) => ProductDetailsScreen()),
             );
           })
         : Future.delayed(Duration(seconds: 2), () {
