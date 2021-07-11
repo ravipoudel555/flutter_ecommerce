@@ -43,7 +43,8 @@ class _SignInScreenState extends State<SignInScreen> {
               children: <Widget>[
                 Container(
                   child: Image(
-                    image: AssetImage('images/small_logo.png'),
+                    image: AssetImage('images/logo.png'),
+                    width: scrSize.width * 0.1,
                   ),
                 ),
                 SizedBox(
@@ -121,14 +122,14 @@ class _SignInScreenState extends State<SignInScreen> {
                                   Navigator.push(
                                     context,
                                     MaterialPageRoute(
-                                      builder: (context) =>
+                                      builder: (BuildContext context) =>
                                           ProductDetailsScreen(),
                                     ),
                                   );
                                 } else {
                                   showDialog(
                                     context: context,
-                                    builder: (BuildContext context) {
+                                    builder: (context) {
                                       return DialogWidget(
                                         scrSize: scrSize,
                                         titleText: 'Login failed!',

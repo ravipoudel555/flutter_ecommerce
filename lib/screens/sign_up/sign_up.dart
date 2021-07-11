@@ -32,7 +32,8 @@ class _SignUpScreenState extends State<SignUpScreen> {
             children: <Widget>[
               Container(
                 child: Image(
-                  image: AssetImage('images/small_logo.png'),
+                  image: AssetImage('images/logo.png'),
+                  width: scrSize.width * 0.1,
                 ),
               ),
               SizedBox(
