@@ -2,6 +2,7 @@ import 'package:ecommerce_app/backend/services.dart';
 import 'package:ecommerce_app/screens/splash_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:ecommerce_app/constants/constants.dart';
 
 bool? _status;
 void main() async {
@@ -10,6 +11,11 @@ void main() async {
     DeviceOrientation.portraitDown,
     DeviceOrientation.portraitUp,
   ]);
+  SystemChrome.setSystemUIOverlayStyle(SystemUiOverlayStyle(
+//n navigation bar color
+    systemNavigationBarColor: kTitleColor,
+    statusBarColor: kTitleColor, // status bar color
+  ));
   _status = await ServicePref().getStatus();
   runApp(MyApp());
 }
